@@ -33,7 +33,19 @@
 		text.y = 180;
 
 		// call update on the stage to make it render the current display list to the canvas:
-		stage.update();
+    stage.update();
+
+    console.log('inited')
+
+    createjs.Ticker.addEventListener('tick', tickHandler)
+
+    function tickHandler() {
+
+      text.rotation += 1
+
+      stage.update()
+    }
+    
 	}
 </script>
 </head>
