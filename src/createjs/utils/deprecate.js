@@ -45,7 +45,7 @@ this.createjs = this.createjs||{};
  * The recommended approach for deprecated properties is:
  *
  *	try {
- *		Obj	ect.defineProperties(object, {
+ *		Object.defineProperties(object, {
  *			readyOnlyProp: { get: createjs.deprecate("readOnlyProp", function() { return this.alternateProp; }) },
  *			readWriteProp: {
  *				get: createjs.deprecate("readOnlyProp", function() { return this.alternateProp; }),
