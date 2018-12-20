@@ -227,6 +227,9 @@ this.createjs = this.createjs||{};
 		this.parent = null;
 
 		/**
+		 * 
+		 * 注册点
+		 * 
 		 * The left offset for this display object's registration point. For example, to make a 100x100px Bitmap rotate
 		 * around its center, you would set regX and {{#crossLink "DisplayObject/regY:property"}}{{/crossLink}} to 50.
 		 * Cached object's registration points should be set based on pre-cache conditions, not cached size.
