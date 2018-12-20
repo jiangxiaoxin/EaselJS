@@ -138,7 +138,9 @@ this.createjs = this.createjs||{};
 		 * @default 0
 		 * @readonly
 		*/
-		this.timeStamp = (new Date()).getTime();
+    // this.timeStamp = (new Date()).getTime();
+    
+    this.timeStamp = Date.now();  // 效率会高一丢丢
 	
 		/**
 		 * Indicates if {{#crossLink "Event/preventDefault"}}{{/crossLink}} has been called
