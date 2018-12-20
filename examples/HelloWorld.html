@@ -40,44 +40,53 @@
 
       createjs.Ticker.addEventListener('tick', tickHandler)
 
-      function tickHandler() {
+      var logged
+
+      function tickHandler(event) {
 
         text.rotation += 1
 
         stage.update()
-      }
 
-
-      var a = {}
-      var b = {}
-
-      a['click'] = ['a_click_1']
-      a['down'] = ['a_down_1', 'a_down_2', 'a_down_3']
-
-      var arr = a['click']
-
-      console.log(a)
-
-      delete a['click']
-
-      console.log(a)
-
-      function vv() {
-        var v = 10
-
-        while (v > 0) {
-          if (v > 5) {
-            console.log(v)
-            return true
-          }
-          console.log(v)
-          v -= 1
+        if (!logged) {
+          console.log('tick event', event)
+          logged = true
         }
-        console.log(v)
-        return false
       }
 
-      console.log(vv())
+
+      // var a = {}
+      // var b = {}
+
+      // a['click'] = ['a_click_1']
+      // a['down'] = ['a_down_1', 'a_down_2', 'a_down_3']
+
+      // var arr = a['click']
+
+      // console.log(a)
+
+      // delete a['click']
+
+      // console.log(a)
+
+
+
+      // function vv() {
+      //   var v = 10
+
+      //   while (v > 0) {
+      //     if (v > 5) {
+      //       console.log(v)
+      //       return true
+      //     }
+      //     console.log(v)
+      //     v -= 1
+      //   }
+      //   console.log(v)
+      //   return false
+      // }
+
+      // console.log(vv())
 
 
 
@@ -87,52 +96,52 @@
        * 两种方式，耗时差不多是2倍的关系
        */
 
-      var count = 1000000
+      // var count = 1000000
 
-      var loop = 5
+      // var loop = 5
 
-      var time
-      var end
-      var start
-      var times
-      var all
-
-
-      times = []
-      for (var m = 0; m < loop; m++) {
-        start = Date.now()
-        for (var i = 0; i < count; i++) {
-          time = Date.now()
-        }
-        end = Date.now()
-        console.log('Date.now()', (end - start) / 1000)
-        times.push(end - start)
-      }
-
-      all = times.reduce(function (prev, current) {
-        return prev + current
-      })
-
-      console.log('>>>>>> Date.now() average:', all / loop / 1000) // 0.1138s
+      // var time
+      // var end
+      // var start
+      // var times
+      // var all
 
 
+      // times = []
+      // for (var m = 0; m < loop; m++) {
+      //   start = Date.now()
+      //   for (var i = 0; i < count; i++) {
+      //     time = Date.now()
+      //   }
+      //   end = Date.now()
+      //   console.log('Date.now()', (end - start) / 1000)
+      //   times.push(end - start)
+      // }
 
-      times = []
-      for (var m = 0; m < loop; m++) {
-        start = new Date().getTime()
-        for (var i = 0; i < count; i++) {
-          time = new Date().getTime()
-        }
-        end = new Date().getTime()
-        console.log('new Date().getTime()', (end - start) / 1000)
-        times.push(end - start)
-      }
+      // all = times.reduce(function (prev, current) {
+      //   return prev + current
+      // })
 
-      all = times.reduce(function (prev, current) {
-        return prev + current
-      })
+      // console.log('>>>>>> Date.now() average:', all / loop / 1000) // 0.1138s
 
-      console.log('>>>>>> new Date().getTime() average:', all / loop / 1000) // 0.2112s
+
+
+      // times = []
+      // for (var m = 0; m < loop; m++) {
+      //   start = new Date().getTime()
+      //   for (var i = 0; i < count; i++) {
+      //     time = new Date().getTime()
+      //   }
+      //   end = new Date().getTime()
+      //   console.log('new Date().getTime()', (end - start) / 1000)
+      //   times.push(end - start)
+      // }
+
+      // all = times.reduce(function (prev, current) {
+      //   return prev + current
+      // })
+
+      // console.log('>>>>>> new Date().getTime() average:', all / loop / 1000) // 0.2112s
 
 
 

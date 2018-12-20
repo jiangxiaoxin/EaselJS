@@ -139,6 +139,13 @@ this.createjs = this.createjs||{};
 	 * @since 0.6.0
 	 */
 
+   /**
+    * timingMode 时间模式，一共有三种： TIMEOUT RAF  RAF_SYNCHED
+    * TIMEOUT:传统的setTimeout来处理，好处是用起来简单，坏处是计算量一大，就无法保证按照设定的帧率来了
+    * RAF：requestAnimationFrame， 浏览器会自己处理更新计算和更新，不管默认的帧率了，通常效率会比默认帧率好，
+    *      要注意：做动画时要根据当前的时间来计算位置
+    * RAF_SYNCHED 用requestAnimationFrame来处理，但是尽量按照设定的帧率来更新
+    */
 
 // public static properties:
 	/**
@@ -201,7 +208,9 @@ this.createjs = this.createjs||{};
 	Ticker.hasEventListener = null;
 	Ticker._listeners = null;
 	createjs.EventDispatcher.initialize(Ticker); // inject EventDispatcher methods.
-	Ticker._addEventListener = Ticker.addEventListener;
+  Ticker._addEventListener = Ticker.addEventListener;
+  
+  // addEventListener 第一次调用之后，会自动开启Ticker
 	Ticker.addEventListener = function() {
 		!Ticker._inited&&Ticker.init();
 		return Ticker._addEventListener.apply(Ticker, arguments);
