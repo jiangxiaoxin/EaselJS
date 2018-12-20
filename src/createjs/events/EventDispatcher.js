@@ -155,14 +155,17 @@ this.createjs = this.createjs||{};
 	 * @param {Boolean} [useCapture] For events that bubble, indicates whether to listen for the event in the capture or bubbling/target phase.
 	 * @return {Function | Object} Returns the listener for chaining or assignment.
 	 **/
+
+   //useCapture true-在捕获阶段监听 false-在目标或者冒泡阶段监听
 	p.addEventListener = function(type, listener, useCapture) {
 		var listeners;
-		if (useCapture) {
+		if (useCapture) { 
 			listeners = this._captureListeners = this._captureListeners||{};
 		} else {
 			listeners = this._listeners = this._listeners||{};
 		}
-		var arr = listeners[type];
+    var arr = listeners[type];
+    // FIXME: 这里为啥 arr存在就removeListener呢 ？应该真的有才删除呀
 		if (arr) { this.removeEventListener(type, listener, useCapture); }
 		arr = listeners[type]; // remove may have deleted the array
 		if (!arr) { listeners[type] = [listener];  }
@@ -239,7 +242,7 @@ this.createjs = this.createjs||{};
 		if (!arr) { return; }
 		for (var i=0,l=arr.length; i<l; i++) {
 			if (arr[i] == listener) {
-				if (l==1) { delete(listeners[type]); } // allows for faster checks.
+				if (l==1) { delete(listeners[type]); } // allows for faster checks. // 这就是为啥上面说那个数组可能为空
 				else { arr.splice(i,1); }
 				break;
 			}
@@ -321,7 +324,7 @@ this.createjs = this.createjs||{};
 			this._dispatchEvent(eventObj, 2);
 		} else {
 			var top=this, list=[top];
-			while (top.parent) { list.push(top = top.parent); }
+			while (top.parent) { list.push(top = top.parent); } // 构建事件的列表
 			var i, l=list.length;
 
 			// capture & atTarget
@@ -361,7 +364,7 @@ this.createjs = this.createjs||{};
 	p.willTrigger = function(type) {
 		var o = this;
 		while (o) {
-			if (o.hasEventListener(type)) { return true; }
+			if (o.hasEventListener(type)) { return true; } // 如果o有，就会结束while循环，否则就按照显示结构，一级一级往上
 			o = o.parent;
 		}
 		return false;
