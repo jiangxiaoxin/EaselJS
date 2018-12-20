@@ -78,6 +78,10 @@ this.createjs = this.createjs||{};
 		this.target = null;
 	
 		/**
+     * 
+     * target: 真的事件的目标是谁
+     * currentTarget: 当前这个事件是被在谁身上添加的监听器监听到了
+     * 
 		 * The current target that a bubbling event is being dispatched from. For non-bubbling events, this will
 		 * always be the same as target. For example, if childObj.parent = parentObj, and a bubbling event
 		 * is generated from childObj, then a listener on parentObj would receive the event with
@@ -90,6 +94,12 @@ this.createjs = this.createjs||{};
 		this.currentTarget = null;
 	
 		/**
+     * 冒泡的阶段：捕获阶段 目标阶段 冒泡阶段
+     * 举例说明：
+     * 捕获：从最根部的对象开始，一级一级往里走
+     * 目标：到达真的想点的对象。默认这个目标就是鼠标点这个地方的最高层的对象，除非是这个对象不支持这个事件。
+     * 冒泡：再按照捕获阶段的反方向跑回去一遍
+     * 
 		 * For bubbling events, this indicates the current event phase:<OL>
 		 * 	<LI> capture phase: starting from the top parent to the target</LI>
 		 * 	<LI> at target phase: currently being dispatched from the target</LI>
