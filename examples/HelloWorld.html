@@ -162,4 +162,78 @@
   </div>
 </body>
 
+<script>
+  // function proto() {
+
+  // }
+
+  class Person {
+    constructor(name) {
+      this.name = name
+    }
+
+    greet() {
+      return "hi, i.m " + this.name
+    }
+  }
+
+  class Student extends Person {
+    constructor(name, age) {
+      super(name)
+      this.age = age
+    }
+
+    greet() {
+      return super.greet() + " and i'm " + this.age + 'years old'
+    }
+  }
+
+  var foo = new Person('foo')
+  console.log(foo);
+  console.log(foo.greet())
+
+  var bar = new Student('bar', 18)
+  console.log(bar)
+  console.log(bar.greet())
+
+  console.log('1', Student.prototype)
+
+  console.log('2', Student.prototype.prototype)
+
+  console.log('3', Object.getPrototypeOf(Student.prototype))
+
+  console.log('33', Object.getPrototypeOf(Student.prototype) === Student) // false
+
+  console.log('33', Object.getPrototypeOf(Student.prototype) === Person) // false
+
+  console.log('33', Object.getPrototypeOf(Student.prototype) === Person.prototype) // true
+
+  console.log('4', Student.prototype.prototype === Object.getPrototypeOf(Student.prototype))
+
+  console.log('5', Object.getPrototypeOf(Student))
+
+  console.log('6', Object.getPrototypeOf(Student) === Student.prototype) // false
+
+  console.log('7', bar instanceof Student, bar instanceof Person)
+
+  console.log('8', Student.prototype.prototype === Person.prototype)
+
+  console.log('9', Student.prototype === Person) // false
+
+  console.log('10', Student.prototype.constructor === Student) // true
+
+  console.log('11', bar.prototype) // undefined
+
+  console.log('12', Object.getPrototypeOf(bar))
+
+  console.log('13', Object.getPrototypeOf(bar) === Student.prototype) // true
+
+  console.log('14', Object.getPrototypeOf(bar) === Person) // false
+
+  var pro = Object.getPrototypeOf(Student.prototype)
+  var a = new pro.constructor('aaaa')
+  console.log(a, a instanceof Person, a instanceof Student) // true false
+  console.log(a.greet()) // hi, i.m aaaa
+</script>
+
 </html>
