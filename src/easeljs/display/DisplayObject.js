@@ -1,30 +1,30 @@
 /*
-* DisplayObject
-* Visit http://createjs.com/ for documentation, updates and examples.
-*
-* Copyright (c) 2010 gskinner.com, inc.
-* 
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-* 
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
-*/
+ * DisplayObject
+ * Visit http://createjs.com/ for documentation, updates and examples.
+ *
+ * Copyright (c) 2010 gskinner.com, inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 /**
  * The EaselJS Javascript library provides a retained graphics mode for canvas including a full hierarchical display
@@ -122,13 +122,13 @@
  */
 
 // namespace:
-this.createjs = this.createjs||{};
+this.createjs = this.createjs || {};
 
-(function() {
+(function () {
 	"use strict";
 
 
-// constructor:
+	// constructor:
 	/**
 	 * DisplayObject is an abstract class that should not be constructed directly. Instead construct subclasses such as
 	 * {{#crossLink "Container"}}{{/crossLink}}, {{#crossLink "Bitmap"}}{{/crossLink}}, and {{#crossLink "Shape"}}{{/crossLink}}.
@@ -143,7 +143,7 @@ this.createjs = this.createjs||{};
 		this.EventDispatcher_constructor();
 
 
-	// public properties:
+		// public properties:
 		/**
 		 * The alpha (transparency) for this display object. 0 is fully transparent, 1 is fully opaque.
 		 * @property alpha
@@ -346,6 +346,8 @@ this.createjs = this.createjs||{};
 		this.compositeOperation = null;
 
 		/**
+		 * 像素对齐
+		 * 
 		 * Indicates whether the display object should be drawn to a whole pixel when
 		 * {{#crossLink "Stage/snapToPixelEnabled:property"}}{{/crossLink}} is true. To enable/disable snapping on whole
 		 * categories of display objects, set this value on the prototype (Ex. Text.prototype.snapToPixel = true).
@@ -402,7 +404,7 @@ this.createjs = this.createjs||{};
 		this.cursor = null;
 
 
-	// private properties:
+		// private properties:
 		/**
 		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
 		 * @property _cacheScale
@@ -473,9 +475,11 @@ this.createjs = this.createjs||{};
 		 */
 		this._glMtx = new createjs.Matrix2D();
 	}
+
+	// 继承自EventDispatcher
 	var p = createjs.extend(DisplayObject, createjs.EventDispatcher);
 
-// static properties:
+	// static properties:
 	/**
 	 * Listing of mouse event names. Used in _hasMouseEventListener.
 	 * @property _MOUSE_EVENTS
@@ -483,7 +487,7 @@ this.createjs = this.createjs||{};
 	 * @static
 	 * @type {Array}
 	 **/
-	DisplayObject._MOUSE_EVENTS = ["click","dblclick","mousedown","mouseout","mouseover","pressmove","pressup","rollout","rollover"];
+	DisplayObject._MOUSE_EVENTS = ["click", "dblclick", "mousedown", "mouseout", "mouseover", "pressmove", "pressup", "rollout", "rollover"];
 
 	/**
 	 * Suppresses errors generated when using features like hitTest, mouse events, and {{#crossLink "getObjectsUnderPoint"}}{{/crossLink}}
@@ -543,14 +547,20 @@ this.createjs = this.createjs||{};
 	 * @static
 	 * @protected
 	 **/
-	var canvas = createjs.createCanvas?createjs.createCanvas():document.createElement("canvas"); // prevent errors on load in browsers without canvas.
+
+	/**
+	 * TODO:
+	 * 这个 createCanvas 貌似就是 FruxCanvas，这是个假的类，根本没有任何实际的绘图操作，只能是防止出错而已。
+	 * 注释说为了防止在没有 canvas元素的浏览器中防止错误，那应该是先看看能不能创建 canvas，如果不能创建再使用 createCanvas 呀。
+	 */
+	var canvas = createjs.createCanvas ? createjs.createCanvas() : document.createElement("canvas"); // prevent errors on load in browsers without canvas.
 	if (canvas.getContext) {
 		DisplayObject._hitTestCanvas = canvas;
 		DisplayObject._hitTestContext = canvas.getContext("2d");
 		canvas.width = canvas.height = 1;
 	}
 
-// events:
+	// events:
 	/**
 	 * Dispatched when the user presses their left mouse button over the display object. See the 
 	 * {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
@@ -685,18 +695,23 @@ this.createjs = this.createjs||{};
 	 */
 
 
-// getter / setters:
+	// getter / setters:
 	/**
 	 * Use the {{#crossLink "DisplayObject/stage:property"}}{{/crossLink}} property instead.
 	 * @method _getStage
 	 * @protected
 	 * @return {Stage}
 	 **/
-	p._getStage = function() {
+	p._getStage = function () {
 		// uses dynamic access to avoid circular dependencies;
-		var o = this, _Stage = createjs["Stage"];
-		while (o.parent) { o = o.parent; }
-		if (o instanceof _Stage) { return o; }
+		var o = this,
+			_Stage = createjs["Stage"];
+		while (o.parent) {
+			o = o.parent;
+		}
+		if (o instanceof _Stage) {
+			return o;
+		}
 		return null;
 	};
 
@@ -735,20 +750,30 @@ this.createjs = this.createjs||{};
 	 */
 	try {
 		Object.defineProperties(p, {
-			stage: { get: p._getStage },
+			stage: {
+				get: p._getStage
+			},
 			cacheID: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.cacheID },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.cacheID = a) }
+				get: function () {
+					return this.bitmapCache && this.bitmapCache.cacheID
+				},
+				set: function (a) {
+					this.bitmapCache && (this.bitmapCache.cacheID = a)
+				}
 			},
 			scale: {
-				get: function() { return this.scaleX; },
-				set: function(scale) { this.scaleX = this.scaleY = scale; }
+				get: function () {
+					return this.scaleX;
+				},
+				set: function (scale) {
+					this.scaleX = this.scaleY = scale;
+				}
 			}
 		});
 	} catch (e) {}
 
 
-// public methods:
+	// public methods:
 	/**
 	 * Returns true or false indicating whether the display object would be visible if drawn to a canvas.
 	 * This does not account for whether it would be visible within the boundaries of the stage.
@@ -757,7 +782,7 @@ this.createjs = this.createjs||{};
 	 * @method isVisible
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
-	p.isVisible = function() {
+	p.isVisible = function () {
 		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0);
 	};
 
@@ -772,7 +797,7 @@ this.createjs = this.createjs||{};
 	 * used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 * @return {Boolean}
 	 **/
-	p.draw = function(ctx, ignoreCache) {
+	p.draw = function (ctx, ignoreCache) {
 		var cache = this.bitmapCache;
 		if (cache && !ignoreCache) {
 			return cache.draw(ctx);
@@ -786,30 +811,37 @@ this.createjs = this.createjs||{};
 	 * @method updateContext
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D to update.
 	 **/
-	p.updateContext = function(ctx) {
-		var o=this, mask=o.mask, mtx= o._props.matrix;
-		
+	p.updateContext = function (ctx) {
+		var o = this,
+			mask = o.mask,
+			mtx = o._props.matrix;
+
 		if (mask && mask.graphics && !mask.graphics.isEmpty()) {
 			mask.getMatrix(mtx);
-			ctx.transform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-			
+			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
+
 			mask.graphics.drawAsPath(ctx);
 			ctx.clip();
-			
+
 			mtx.invert();
-			ctx.transform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
+			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
 		}
-		
+
 		this.getMatrix(mtx);
-		var tx = mtx.tx, ty = mtx.ty;
+		var tx = mtx.tx,
+			ty = mtx.ty;
 		if (DisplayObject._snapToPixelEnabled && o.snapToPixel) {
 			tx = tx + (tx < 0 ? -0.5 : 0.5) | 0;
 			ty = ty + (ty < 0 ? -0.5 : 0.5) | 0;
 		}
-		ctx.transform(mtx.a,  mtx.b, mtx.c, mtx.d, tx, ty);
+		ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, tx, ty);
 		ctx.globalAlpha *= o.alpha;
-		if (o.compositeOperation) { ctx.globalCompositeOperation = o.compositeOperation; }
-		if (o.shadow) { this._applyShadow(ctx, o.shadow); }
+		if (o.compositeOperation) {
+			ctx.globalCompositeOperation = o.compositeOperation;
+		}
+		if (o.shadow) {
+			this._applyShadow(ctx, o.shadow);
+		}
 	};
 
 	/**
@@ -848,8 +880,8 @@ this.createjs = this.createjs||{};
 	 * 	cached elements with greater fidelity. Default is 1.
 	 * @param {Object} [options=undefined] Specify additional parameters for the cache logic
 	 **/
-	p.cache = function(x, y, width, height, scale, options) {
-		if (!this.bitmapCache){
+	p.cache = function (x, y, width, height, scale, options) {
+		if (!this.bitmapCache) {
 			this.bitmapCache = new createjs.BitmapCache();
 		} else {
 			this.bitmapCache._autoGenerated = false;
@@ -879,7 +911,7 @@ this.createjs = this.createjs||{};
 	 * <a href="https://html.spec.whatwg.org/multipage/scripting.html#dom-context-2d-globalcompositeoperation">
 	 * whatwg spec on compositing</a>.
 	 **/
-	p.updateCache = function(compositeOperation) {
+	p.updateCache = function (compositeOperation) {
 		if (!this.bitmapCache) {
 			throw "cache() must be called before updateCache()";
 		}
@@ -890,7 +922,7 @@ this.createjs = this.createjs||{};
 	 * Clears the current cache. See {{#crossLink "DisplayObject/cache"}}{{/crossLink}} for more information.
 	 * @method uncache
 	 **/
-	p.uncache = function() {
+	p.uncache = function () {
 		if (this.bitmapCache) {
 			this.bitmapCache.release();
 			this.bitmapCache = undefined;
@@ -903,8 +935,8 @@ this.createjs = this.createjs||{};
 	 * @method getCacheDataURL
 	 * @return {String} The image data url for the cache.
 	 **/
-	p.getCacheDataURL = function() {
-		return this.bitmapCache?this.bitmapCache.getCacheDataURL():null;
+	p.getCacheDataURL = function () {
+		return this.bitmapCache ? this.bitmapCache.getCacheDataURL() : null;
 	};
 
 	/**
@@ -928,8 +960,8 @@ this.createjs = this.createjs||{};
 	 * @return {Point} A Point instance with x and y properties correlating to the transformed coordinates
 	 * on the stage.
 	 **/
-	p.localToGlobal = function(x, y, pt) {
-		return this.getConcatenatedMatrix(this._props.matrix).transformPoint(x,y, pt||new createjs.Point());
+	p.localToGlobal = function (x, y, pt) {
+		return this.getConcatenatedMatrix(this._props.matrix).transformPoint(x, y, pt || new createjs.Point());
 	};
 
 	/**
@@ -953,8 +985,8 @@ this.createjs = this.createjs||{};
 	 * @return {Point} A Point instance with x and y properties correlating to the transformed position in the
 	 * display object's coordinate space.
 	 **/
-	p.globalToLocal = function(x, y, pt) {
-		return this.getConcatenatedMatrix(this._props.matrix).invert().transformPoint(x,y, pt||new createjs.Point());
+	p.globalToLocal = function (x, y, pt) {
+		return this.getConcatenatedMatrix(this._props.matrix).invert().transformPoint(x, y, pt || new createjs.Point());
 	};
 
 	/**
@@ -974,7 +1006,7 @@ this.createjs = this.createjs||{};
 	 * @return {Point} Returns a Point instance with x and y properties correlating to the transformed position
 	 * in the target's coordinate space.
 	 **/
-	p.localToLocal = function(x, y, target, pt) {
+	p.localToLocal = function (x, y, target, pt) {
 		pt = this.localToGlobal(x, y, pt);
 		return target.globalToLocal(pt.x, pt.y, pt);
 	};
@@ -999,8 +1031,8 @@ this.createjs = this.createjs||{};
 	 * @param {Number} [regY=0] The vertical registration point in pixels
 	 * @return {DisplayObject} Returns this instance. Useful for chaining commands.
 	 * @chainable
-	*/
-	p.setTransform = function(x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
+	 */
+	p.setTransform = function (x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
 		this.x = x || 0;
 		this.y = y || 0;
 		this.scaleX = scaleX == null ? 1 : scaleX;
@@ -1020,9 +1052,10 @@ this.createjs = this.createjs||{};
 	 * Matrix object is returned.
 	 * @return {Matrix2D} A matrix representing this display object's transform.
 	 **/
-	p.getMatrix = function(matrix) {
-		var o = this, mtx = matrix || new createjs.Matrix2D();
-		return o.transformMatrix ?  mtx.copy(o.transformMatrix) :
+	p.getMatrix = function (matrix) {
+		var o = this,
+			mtx = matrix || new createjs.Matrix2D();
+		return o.transformMatrix ? mtx.copy(o.transformMatrix) :
 			(mtx.identity() && mtx.appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY));
 	};
 
@@ -1036,8 +1069,9 @@ this.createjs = this.createjs||{};
 	 * If null, a new Matrix2D object is returned.
 	 * @return {Matrix2D} The combined matrix.
 	 **/
-	p.getConcatenatedMatrix = function(matrix) {
-		var o = this, mtx = this.getMatrix(matrix);
+	p.getConcatenatedMatrix = function (matrix) {
+		var o = this,
+			mtx = this.getMatrix(matrix);
 		while (o = o.parent) {
 			mtx.prependMatrix(o.getMatrix(o._props.matrix));
 		}
@@ -1052,15 +1086,18 @@ this.createjs = this.createjs||{};
 	 * If null, a new DisplayProps object is returned.
 	 * @return {DisplayProps} The combined display properties.
 	 **/
-	p.getConcatenatedDisplayProps = function(props) {
+	p.getConcatenatedDisplayProps = function (props) {
 		props = props ? props.identity() : new createjs.DisplayProps();
-		var o = this, mtx = o.getMatrix(props.matrix); 
+		var o = this,
+			mtx = o.getMatrix(props.matrix);
 		do {
 			props.prepend(o.visible, o.alpha, o.shadow, o.compositeOperation);
-			
+
 			// we do this to avoid problems with the matrix being used for both operations when o._props.matrix is passed in as the props param.
 			// this could be simplified (ie. just done as part of the prepend above) if we switched to using a pool.
-			if (o != this) { mtx.prependMatrix(o.getMatrix(o._props.matrix)); }
+			if (o != this) {
+				mtx.prependMatrix(o.getMatrix(o._props.matrix));
+			}
 		} while (o = o.parent);
 		return props;
 	};
@@ -1082,12 +1119,12 @@ this.createjs = this.createjs||{};
 	 * @param {Number} y The y position to check in the display object's local coordinates.
 	 * @return {Boolean} A Boolean indicating whether a visible portion of the DisplayObject intersect the specified
 	 * local Point.
-	*/
-	p.hitTest = function(x, y) {
+	 */
+	p.hitTest = function (x, y) {
 		var ctx = DisplayObject._hitTestContext;
 		ctx.setTransform(1, 0, 0, 1, -x, -y);
 		// hit tests occur in a 2D context, so don't attempt to draw a GL only Texture into a 2D context
-		this.draw(ctx, !(this.bitmapCache && !(this.bitmapCache._cacheCanvas instanceof WebGLTexture) ));
+		this.draw(ctx, !(this.bitmapCache && !(this.bitmapCache._cacheCanvas instanceof WebGLTexture)));
 
 		var hit = this._testHit(ctx);
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1107,9 +1144,11 @@ this.createjs = this.createjs||{};
 	 * @param {Object} props A generic object containing properties to copy to the DisplayObject instance.
 	 * @return {DisplayObject} Returns the instance the method is called on (useful for chaining calls.)
 	 * @chainable
-	*/
-	p.set = function(props) {
-		for (var n in props) { this[n] = props[n]; }
+	 */
+	p.set = function (props) {
+		for (var n in props) {
+			this[n] = props[n];
+		}
 		return this;
 	};
 
@@ -1149,7 +1188,7 @@ this.createjs = this.createjs||{};
 	 * 		Returns approximate bounds. Values will be more accurate if spritesheet frame registration points are close
 	 * 		to (x=0,y=0).
 	 * 	</td></tr>
-	* </table>
+	 * </table>
 	 * 
 	 * Bounds can be expensive to calculate for some objects (ex. text, or containers with many children), and
 	 * are recalculated each time you call getBounds(). You can prevent recalculation on static objects by setting the
@@ -1170,8 +1209,10 @@ this.createjs = this.createjs||{};
 	 * @return {Rectangle} A Rectangle instance representing the bounds, or null if bounds are not available for this
 	 * object.
 	 **/
-	p.getBounds = function() {
-		if (this._bounds) { return this._rectangle.copy(this._bounds); }
+	p.getBounds = function () {
+		if (this._bounds) {
+			return this._rectangle.copy(this._bounds);
+		}
 		var cache = this.bitmapCache;
 		if (cache && this.cacheCanvas) {
 			return cache.getBounds();
@@ -1194,7 +1235,7 @@ this.createjs = this.createjs||{};
 	 * @method getTransformedBounds
 	 * @return {Rectangle} A Rectangle instance representing the bounds, or null if bounds are not available for this object.
 	 **/
-	p.getTransformedBounds = function() {
+	p.getTransformedBounds = function () {
 		return this._getBounds();
 	};
 
@@ -1211,8 +1252,11 @@ this.createjs = this.createjs||{};
 	 * @param {Number} width The width of the bounds.
 	 * @param {Number} height The height of the bounds.
 	 **/
-	p.setBounds = function(x, y, width, height) {
-		if (x == null) { this._bounds = x; return; }
+	p.setBounds = function (x, y, width, height) {
+		if (x == null) {
+			this._bounds = x;
+			return;
+		}
 		this._bounds = (this._bounds || new createjs.Rectangle()).setValues(x, y, width, height);
 	};
 
@@ -1223,7 +1267,7 @@ this.createjs = this.createjs||{};
 	 * @method clone
 	 * @return {DisplayObject} A clone of the current DisplayObject instance.
 	 **/
-	p.clone = function() {
+	p.clone = function () {
 		return this._cloneProps(new DisplayObject());
 	};
 
@@ -1232,12 +1276,12 @@ this.createjs = this.createjs||{};
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-	p.toString = function() {
-		return "[DisplayObject (name="+  this.name +")]";
+	p.toString = function () {
+		return "[DisplayObject (name=" + this.name + ")]";
 	};
 
 
-// private methods:
+	// private methods:
 	/**
 	 * Called before the object gets drawn and is a chance to ensure the display state of the object is correct.
 	 * Mostly used by {{#crossLink "MovieClip"}}{{/crossLink}} and {{#crossLink "BitmapText"}}{{/crossLink}} to
@@ -1260,7 +1304,7 @@ this.createjs = this.createjs||{};
 	 * @return {DisplayObject} o
 	 * @protected
 	 **/
-	p._cloneProps = function(o) {
+	p._cloneProps = function (o) {
 		o.alpha = this.alpha;
 		o.mouseEnabled = this.mouseEnabled;
 		o.tickEnabled = this.tickEnabled;
@@ -1274,11 +1318,11 @@ this.createjs = this.createjs||{};
 		o.skewX = this.skewX;
 		o.skewY = this.skewY;
 		o.visible = this.visible;
-		o.x  = this.x;
+		o.x = this.x;
 		o.y = this.y;
 		o.compositeOperation = this.compositeOperation;
 		o.snapToPixel = this.snapToPixel;
-		o.filters = this.filters==null?null:this.filters.slice(0);
+		o.filters = this.filters == null ? null : this.filters.slice(0);
 		o.mask = this.mask;
 		o.hitArea = this.hitArea;
 		o.cursor = this.cursor;
@@ -1293,7 +1337,7 @@ this.createjs = this.createjs||{};
 	 * @param {CanvasRenderingContext2D} ctx
 	 * @param {Shadow} shadow
 	 **/
-	p._applyShadow = function(ctx, shadow) {
+	p._applyShadow = function (ctx, shadow) {
 		shadow = shadow || Shadow.identity;
 		ctx.shadowColor = shadow.color;
 		ctx.shadowOffsetX = shadow.offsetX;
@@ -1306,7 +1350,7 @@ this.createjs = this.createjs||{};
 	 * @param {Object} evtObj An event object that will be dispatched to all tick listeners. This object is reused between dispatchers to reduce construction & GC costs.
 	 * @protected
 	 **/
-	p._tick = function(evtObj) {
+	p._tick = function (evtObj) {
 		// because tick can be really performance sensitive, check for listeners before calling dispatchEvent.
 		var ls = this._listeners;
 		if (ls && ls["tick"]) {
@@ -1323,7 +1367,7 @@ this.createjs = this.createjs||{};
 	 * @param {CanvasRenderingContext2D} ctx
 	 * @return {Boolean}
 	 **/
-	p._testHit = function(ctx) {
+	p._testHit = function (ctx) {
 		try {
 			var hit = ctx.getImageData(0, 0, 1, 1).data[3] > 1;
 		} catch (e) {
@@ -1341,7 +1385,7 @@ this.createjs = this.createjs||{};
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	p._getBounds = function(matrix, ignoreTransform){
+	p._getBounds = function (matrix, ignoreTransform) {
 		return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
 	};
 
@@ -1353,29 +1397,69 @@ this.createjs = this.createjs||{};
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	p._transformBounds = function(bounds, matrix, ignoreTransform) {
-		if (!bounds) { return bounds; }
-		var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height, mtx = this._props.matrix;
+	p._transformBounds = function (bounds, matrix, ignoreTransform) {
+		if (!bounds) {
+			return bounds;
+		}
+		var x = bounds.x,
+			y = bounds.y,
+			width = bounds.width,
+			height = bounds.height,
+			mtx = this._props.matrix;
 		mtx = ignoreTransform ? mtx.identity() : this.getMatrix(mtx);
-		
-		if (x || y) { mtx.appendTransform(0,0,1,1,0,0,0,-x,-y); } // TODO: simplify this.
-		if (matrix) { mtx.prependMatrix(matrix); }
-		
-		var x_a = width*mtx.a, x_b = width*mtx.b;
-		var y_c = height*mtx.c, y_d = height*mtx.d;
-		var tx = mtx.tx, ty = mtx.ty;
-		
-		var minX = tx, maxX = tx, minY = ty, maxY = ty;
 
-		if ((x = x_a + tx) < minX) { minX = x; } else if (x > maxX) { maxX = x; }
-		if ((x = x_a + y_c + tx) < minX) { minX = x; } else if (x > maxX) { maxX = x; }
-		if ((x = y_c + tx) < minX) { minX = x; } else if (x > maxX) { maxX = x; }
+		if (x || y) {
+			mtx.appendTransform(0, 0, 1, 1, 0, 0, 0, -x, -y);
+		} // TODO: simplify this.
+		if (matrix) {
+			mtx.prependMatrix(matrix);
+		}
 
-		if ((y = x_b + ty) < minY) { minY = y; } else if (y > maxY) { maxY = y; }
-		if ((y = x_b + y_d + ty) < minY) { minY = y; } else if (y > maxY) { maxY = y; }
-		if ((y = y_d + ty) < minY) { minY = y; } else if (y > maxY) { maxY = y; }
+		var x_a = width * mtx.a,
+			x_b = width * mtx.b;
+		var y_c = height * mtx.c,
+			y_d = height * mtx.d;
+		var tx = mtx.tx,
+			ty = mtx.ty;
 
-		return bounds.setValues(minX, minY, maxX-minX, maxY-minY);
+		var minX = tx,
+			maxX = tx,
+			minY = ty,
+			maxY = ty;
+
+		if ((x = x_a + tx) < minX) {
+			minX = x;
+		} else if (x > maxX) {
+			maxX = x;
+		}
+		if ((x = x_a + y_c + tx) < minX) {
+			minX = x;
+		} else if (x > maxX) {
+			maxX = x;
+		}
+		if ((x = y_c + tx) < minX) {
+			minX = x;
+		} else if (x > maxX) {
+			maxX = x;
+		}
+
+		if ((y = x_b + ty) < minY) {
+			minY = y;
+		} else if (y > maxY) {
+			maxY = y;
+		}
+		if ((y = x_b + y_d + ty) < minY) {
+			minY = y;
+		} else if (y > maxY) {
+			maxY = y;
+		}
+		if ((y = y_d + ty) < minY) {
+			minY = y;
+		} else if (y > maxY) {
+			maxY = y;
+		}
+
+		return bounds.setValues(minX, minY, maxX - minX, maxY - minY);
 	};
 
 	/**
@@ -1384,10 +1468,12 @@ this.createjs = this.createjs||{};
 	 * @return {Boolean}
 	 * @protected
 	 **/
-	p._hasMouseEventListener = function() {
+	p._hasMouseEventListener = function () {
 		var evts = DisplayObject._MOUSE_EVENTS;
-		for (var i= 0, l=evts.length; i<l; i++) {
-			if (this.hasEventListener(evts[i])) { return true; }
+		for (var i = 0, l = evts.length; i < l; i++) {
+			if (this.hasEventListener(evts[i])) {
+				return true;
+			}
 		}
 		return !!this.cursor;
 	};

@@ -77,6 +77,8 @@ this.createjs = this.createjs||{};
 createjs.promote = function(subclass, prefix) {
 	"use strict";
 
+	prefix = prefix || 'super'
+
 	var subP = subclass.prototype, supP = (Object.getPrototypeOf&&Object.getPrototypeOf(subP))||subP.__proto__;
 	if (supP) {
 		subP[(prefix+="_") + "constructor"] = supP.constructor; // constructor is not always innumerable
