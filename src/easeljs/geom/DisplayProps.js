@@ -108,7 +108,7 @@ this.createjs = this.createjs||{};
 
 // public methods:
 	/**
-	 * Appends the specified display properties. This is generally used to apply a child's properties its parent's.
+	 * Appends the specified display properties. This is generally used to apply a child's properties  to its parent's.
 	 * @method append
 	 * @param {Boolean} visible desired visible value
 	 * @param {Number} alpha desired alpha value

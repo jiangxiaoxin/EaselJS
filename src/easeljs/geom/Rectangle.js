@@ -54,8 +54,8 @@ this.createjs = this.createjs||{};
 	 **/
 	function Rectangle(x, y, width, height) {
 		this.setValues(x, y, width, height);
-		
-		
+
+
 	// public properties:
 		// assigned in the setValues method.
 		/**
@@ -63,19 +63,19 @@ this.createjs = this.createjs||{};
 		 * @property x
 		 * @type Number
 		 **/
-	
+
 		/**
 		 * Y position.
 		 * @property y
 		 * @type Number
 		 **/
-	
+
 		/**
 		 * Width.
 		 * @property width
 		 * @type Number
 		 **/
-	
+
 		/**
 		 * Height.
 		 * @property height
@@ -85,7 +85,7 @@ this.createjs = this.createjs||{};
 	var p = Rectangle.prototype;
 
 // public methods:
-	/** 
+	/**
 	 * Sets the specified values on this instance.
 	 * @method setValues
 	 * @param {Number} [x=0] X position.
@@ -103,9 +103,10 @@ this.createjs = this.createjs||{};
 		this.height = height||0;
 		return this;
 	};
-	
-	/** 
+
+	/**
 	 * Extends the rectangle's bounds to include the described point or rectangle.
+	 * 扩展一个矩形，让其包含输入的x, y, width, height构建的矩形
 	 * @method extend
 	 * @param {Number} x X position of the point or rectangle.
 	 * @param {Number} y Y position of the point or rectangle.
@@ -123,9 +124,12 @@ this.createjs = this.createjs||{};
 		if (y < this.y) { this.height += this.y-y; this.y = y; }
 		return this;
 	};
-	
-	/** 
+
+	/**
 	 * Adds the specified padding to the rectangle's bounds.
+	 *
+	 * 将原来的矩形填充四周的“边”。在原来的区域四周加上四条“边”
+	 *
 	 * @method pad
 	 * @param {Number} top
 	 * @param {Number} left
@@ -141,7 +145,7 @@ this.createjs = this.createjs||{};
 		this.height += top+bottom;
 		return this;
 	};
-	
+
 	/**
 	 * Copies all properties from the specified rectangle to this rectangle.
 	 * @method copy
@@ -152,8 +156,8 @@ this.createjs = this.createjs||{};
 	p.copy = function(rectangle) {
 		return this.setValues(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	};
-	
-	/** 
+
+	/**
 	 * Returns true if this rectangle fully encloses the described point or rectangle.
 	 * @method contains
 	 * @param {Number} x X position of the point or rectangle.
@@ -167,9 +171,12 @@ this.createjs = this.createjs||{};
 		height = height||0;
 		return (x >= this.x && x+width <= this.x+this.width && y >= this.y && y+height <= this.y+this.height);
 	};
-	
-	/** 
+
+	/**
 	 * Returns a new rectangle which contains this rectangle and the specified rectangle.
+	 *
+	 * 同时包含两个矩形的最小矩形
+	 *
 	 * @method union
 	 * @param {Rectangle} rect The rectangle to calculate a union with.
 	 * @return {Rectangle} A new rectangle describing the union.
@@ -177,10 +184,13 @@ this.createjs = this.createjs||{};
 	p.union = function(rect) {
 		return this.clone().extend(rect.x, rect.y, rect.width, rect.height);
 	};
-	
-	/** 
+
+	/**
 	 * Returns a new rectangle which describes the intersection (overlap) of this rectangle and the specified rectangle,
 	 * or null if they do not intersect.
+	 *
+	 * 连个矩形相交的部分的那个矩形
+	 *
 	 * @method intersection
 	 * @param {Rectangle} rect The rectangle to calculate an intersection with.
 	 * @return {Rectangle} A new rectangle describing the intersection or null.
@@ -193,8 +203,8 @@ this.createjs = this.createjs||{};
 		if (this.y + this.height < y2) { y2 = this.y + this.height; }
 		return (x2 <= x1 || y2 <= y1) ? null : new Rectangle(x1, y1, x2-x1, y2-y1);
 	};
-	
-	/** 
+
+	/**
 	 * Returns true if the specified rectangle intersects (has any overlap) with this rectangle.
 	 * @method intersects
 	 * @param {Rectangle} rect The rectangle to compare.
@@ -203,8 +213,8 @@ this.createjs = this.createjs||{};
 	p.intersects = function(rect) {
 		return (rect.x <= this.x+this.width && this.x <= rect.x+rect.width && rect.y <= this.y+this.height && this.y <= rect.y + rect.height);
 	};
-	
-	/** 
+
+	/**
 	 * Returns true if the width or height are equal or less than 0.
 	 * @method isEmpty
 	 * @return {Boolean} True if the rectangle is empty.
@@ -212,7 +222,7 @@ this.createjs = this.createjs||{};
 	p.isEmpty = function() {
 		return this.width <= 0 || this.height <= 0;
 	};
-	
+
 	/**
 	 * Returns a clone of the Rectangle instance.
 	 * @method clone
@@ -230,7 +240,7 @@ this.createjs = this.createjs||{};
 	p.toString = function() {
 		return "[Rectangle (x="+this.x+" y="+this.y+" width="+this.width+" height="+this.height+")]";
 	};
-	
-	
+
+
 	createjs.Rectangle = Rectangle;
 }());

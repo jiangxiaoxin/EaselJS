@@ -42,9 +42,9 @@ this.createjs = this.createjs||{};
 	 * Represents a point on a 2 dimensional x / y coordinate system.
 	 *
 	 * <h4>Example</h4>
-	 * 
+	 *
 	 *      var point = new createjs.Point(0, 100);
-	 * 
+	 *
 	 * @class Point
 	 * @param {Number} [x=0] X position.
 	 * @param {Number} [y=0] Y position.
@@ -52,8 +52,8 @@ this.createjs = this.createjs||{};
 	 **/
 	function Point(x, y) {
 	 	this.setValues(x, y);
-	 	
-	 	
+
+
 	// public properties:
 		// assigned in the setValues method.
 		/**
@@ -62,7 +62,7 @@ this.createjs = this.createjs||{};
 		 * @type Number
 		 * @default 0
 		 **/
-	
+
 		/**
 		 * Y position.
 		 * @property y
@@ -71,9 +71,9 @@ this.createjs = this.createjs||{};
 		 **/
 	}
 	var p = Point.prototype;
-	
+
 // public methods:
-	/** 
+	/**
 	 * Sets the specified values on this instance.
 	 * @method setValues
 	 * @param {Number} [x=0] X position.
@@ -86,8 +86,8 @@ this.createjs = this.createjs||{};
 		this.y = y||0;
 		return this;
 	};
-	
-	/** 
+
+	/**
 	 * Offsets the Point object by the specified amount.
 	 * <ul>
 	 *     <li>The value of `dx` is added to the original value of `x` to create the new `x` value</li>
@@ -105,7 +105,7 @@ this.createjs = this.createjs||{};
 		return this;
 	};
 
-	/** 
+	/**
 	 * Converts a pair of polar coordinates to a Cartesian point coordinate.
 	 * @method polar
 	 * @param {Number} len The length coordinate of the polar pair.
@@ -125,6 +125,12 @@ this.createjs = this.createjs||{};
 	/**
 	 * Determine a point between two specified points.
 	 *
+	 * 在两点间的连线上找一个符合距离比例的点
+	 * 这个实现我觉得不好吧，习惯上传入的pt1是起点 pt2是终点，然后找一个距离pt1多少比例的点
+	 * pt.x = pt1.x + (pt2.x - pt1.x) * f
+	 * pt.y = pt1.y + (pt2.y - pt2.y) * f
+	 *
+	 *
 	 * The parameter `f` determines where the new interpolated point is located relative to the two end points specified
 	 * by parameters `pt1` and `pt2`:
 	 * <ul>
@@ -143,13 +149,14 @@ this.createjs = this.createjs||{};
 	 * @return {Point} A new interpolated Point, or the `pt` passed in the 4th parameter with the interpolated values.
 	 * @static
 	*/
+	// 这样写，pt1表示终点，pt2表示起点呀
 	Point.interpolate = function(pt1, pt2, f, pt) {
 		pt = pt || new Point();
 		pt.x = pt2.x + f * (pt1.x - pt2.x);
 		pt.y = pt2.y + f * (pt1.y - pt2.y);
 		return pt;
 	};
-	
+
 	/**
 	 * Copies all properties from the specified point to this point.
 	 * @method copy
@@ -162,7 +169,7 @@ this.createjs = this.createjs||{};
 		this.y = point.y;
 		return this;
 	};
-	
+
 	/**
 	 * Returns a clone of the Point instance.
 	 * @method clone
@@ -180,7 +187,7 @@ this.createjs = this.createjs||{};
 	p.toString = function() {
 		return "[Point (x="+this.x+" y="+this.y+")]";
 	};
-	
-	
+
+
 	createjs.Point = Point;
 }());

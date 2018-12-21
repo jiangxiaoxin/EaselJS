@@ -1084,6 +1084,17 @@ this.createjs = this.createjs || {};
 		while (o = o.parent) {
 			mtx.prependMatrix(o.getMatrix(o._props.matrix));
 		}
+		
+
+		// 拆开写：
+		// var o = this
+		// var mtx = this.getMatrix(matrix)
+		// while(o.parent) {
+		// 	o = o.parent
+		// 	mtx.prependMatrix(o.getMatrix(o._props.matrix))
+		// }
+
+
 		return mtx;
 	};
 
@@ -1271,7 +1282,7 @@ this.createjs = this.createjs || {};
 	};
 
 	/**
-	 * Returns a clone of this DisplayObject. Some properties that are specific to this instance's current context are
+	 * Returns a clone of this DisplayObject. Sofme properties that are specific to this instance's current context are
 	 * reverted to their defaults (for example .parent). Caches are not maintained across clones, and some elements
 	 * are copied by reference (masks, individual filter instances, hit area)
 	 * @method clone
