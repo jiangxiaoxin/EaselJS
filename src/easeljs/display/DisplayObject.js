@@ -1097,8 +1097,9 @@ this.createjs = this.createjs || {};
 	 **/
 	p.getConcatenatedDisplayProps = function (props) {
 		props = props ? props.identity() : new createjs.DisplayProps();
-		var o = this,
-			mtx = o.getMatrix(props.matrix);
+		var o = this;
+		// 这里传入的是props的matrix属性，那就一直会计算在props上，所以最后返回的props包含完整的矩阵变换
+		var	mtx = o.getMatrix(props.matrix);
 		do {
 			props.prepend(o.visible, o.alpha, o.shadow, o.compositeOperation);
 
