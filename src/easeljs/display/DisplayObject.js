@@ -325,6 +325,8 @@ this.createjs = this.createjs || {};
 		this.y = 0;
 
 		/**
+		 * 显示对象的变换矩阵，如果设置此值，将覆盖其他的变换属性，比如 x y rotation scale。。。
+		 * 
 		 * If set, defines the transformation for this display object, overriding all other transformation properties
 		 * (x, y, rotation, scale, skew).
 		 * @property transformMatrix
@@ -705,7 +707,7 @@ this.createjs = this.createjs || {};
 	p._getStage = function () {
 		// uses dynamic access to avoid circular dependencies;
 		var o = this,
-			_Stage = createjs["Stage"];
+			_Stage = createjs["Stage"]; // _Stage 是个类
 		while (o.parent) {
 			o = o.parent;
 		}
@@ -810,6 +812,8 @@ this.createjs = this.createjs || {};
 	 * to the specified context. This is typically called prior to {{#crossLink "DisplayObject/draw"}}{{/crossLink}}.
 	 * @method updateContext
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D to update.
+	 * 
+	 * 将此显示对象绘制在传入的绘图上下文中
 	 **/
 	p.updateContext = function (ctx) {
 		var o = this,
@@ -1052,6 +1056,11 @@ this.createjs = this.createjs || {};
 	 * Matrix object is returned.
 	 * @return {Matrix2D} A matrix representing this display object's transform.
 	 **/
+
+	 /**
+		* 如果传入一个matrix对象，就将显示对象的matrix属性复制进去，
+		* 如果不传，就新建一个matrix 然后复制一份值，这样子外部用这个matrix去做什么处理，都不会影响显示对象本身的变换逻辑
+	  */
 	p.getMatrix = function (matrix) {
 		var o = this,
 			mtx = matrix || new createjs.Matrix2D();

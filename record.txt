@@ -1,0 +1,8 @@
+bitmapCache是干嘛的？ 怎么实现的？
+displayobject的matrix计算？
+getConcatenatedMatrix ？
+
+
+displayobject getMatrix 得到的矩阵是它自己的矩阵，相对于其父容器的变换，
+getConcatenatedMatrix 得到的是其一直到跟容器的矩阵，相对于根容器，也就是 Stage，一般不会给Stage做变换，所以相当于针对canvas显示窗口的变换。
+如果Stage发生变换了，那就不是相对于 canvas显示窗口了。

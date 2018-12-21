@@ -13,143 +13,10 @@
   <!-- We also provide hosted minified versions of all CreateJS libraries.
 	  http://code.createjs.com -->
 
-  <script id="editable">
-    function init() {
-      // get a reference to the canvas we'll be working with:
-      var canvas = document.getElementById("testCanvas");
 
-      // create a stage object to work with the canvas. This is the top level node in the display list:
-      var stage = new createjs.Stage(canvas);
-
-      // Create a new Text object:
-      var text = new createjs.Text("Hello World!", "36px Arial", "#777");
-      text.textAlign = "center";
-
-      // add the text as a child of the stage. This means it will be drawn any time the stage is updated
-      // and that its transformations will be relative to the stage coordinates:
-      stage.addChild(text);
-
-      // position the text on screen, relative to the stage coordinates:
-      text.x = canvas.width / 2;
-      text.y = 180;
-
-      // call update on the stage to make it render the current display list to the canvas:
-      stage.update();
-
-      console.log('inited')
-
-      createjs.Ticker.addEventListener('tick', tickHandler)
-
-      var logged
-
-      function tickHandler(event) {
-
-        text.rotation += 1
-
-        stage.update()
-
-        if (!logged) {
-          console.log('tick event', event)
-          logged = true
-        }
-      }
-
-
-      // var a = {}
-      // var b = {}
-
-      // a['click'] = ['a_click_1']
-      // a['down'] = ['a_down_1', 'a_down_2', 'a_down_3']
-
-      // var arr = a['click']
-
-      // console.log(a)
-
-      // delete a['click']
-
-      // console.log(a)
-
-
-
-      // function vv() {
-      //   var v = 10
-
-      //   while (v > 0) {
-      //     if (v > 5) {
-      //       console.log(v)
-      //       return true
-      //     }
-      //     console.log(v)
-      //     v -= 1
-      //   }
-      //   console.log(v)
-      //   return false
-      // }
-
-      // console.log(vv())
-
-
-
-
-
-      /**
-       * 两种方式，耗时差不多是2倍的关系
-       */
-
-      // var count = 1000000
-
-      // var loop = 5
-
-      // var time
-      // var end
-      // var start
-      // var times
-      // var all
-
-
-      // times = []
-      // for (var m = 0; m < loop; m++) {
-      //   start = Date.now()
-      //   for (var i = 0; i < count; i++) {
-      //     time = Date.now()
-      //   }
-      //   end = Date.now()
-      //   console.log('Date.now()', (end - start) / 1000)
-      //   times.push(end - start)
-      // }
-
-      // all = times.reduce(function (prev, current) {
-      //   return prev + current
-      // })
-
-      // console.log('>>>>>> Date.now() average:', all / loop / 1000) // 0.1138s
-
-
-
-      // times = []
-      // for (var m = 0; m < loop; m++) {
-      //   start = new Date().getTime()
-      //   for (var i = 0; i < count; i++) {
-      //     time = new Date().getTime()
-      //   }
-      //   end = new Date().getTime()
-      //   console.log('new Date().getTime()', (end - start) / 1000)
-      //   times.push(end - start)
-      // }
-
-      // all = times.reduce(function (prev, current) {
-      //   return prev + current
-      // })
-
-      // console.log('>>>>>> new Date().getTime() average:', all / loop / 1000) // 0.2112s
-
-
-
-    }
-  </script>
 </head>
 
-<body onload="init();">
+<body>
 
   <header class="EaselJS">
     <h1>Hello World!</h1>
@@ -162,7 +29,142 @@
   </div>
 </body>
 
-<script>
+<!-- <script id="editable">
+  function init() {
+    // get a reference to the canvas we'll be working with:
+    var canvas = document.getElementById("testCanvas");
+
+    // create a stage object to work with the canvas. This is the top level node in the display list:
+    var stage = new createjs.Stage(canvas);
+
+    // Create a new Text object:
+    var text = new createjs.Text("Hello World!", "36px Arial", "#777");
+    text.textAlign = "center";
+
+    // add the text as a child of the stage. This means it will be drawn any time the stage is updated
+    // and that its transformations will be relative to the stage coordinates:
+    stage.addChild(text);
+
+    // position the text on screen, relative to the stage coordinates:
+    text.x = canvas.width / 2;
+    text.y = 180;
+
+    // call update on the stage to make it render the current display list to the canvas:
+    stage.update();
+
+    console.log('inited')
+
+    createjs.Ticker.addEventListener('tick', tickHandler)
+
+    var logged
+
+    function tickHandler(event) {
+
+      text.rotation += 1
+
+      stage.update()
+
+      if (!logged) {
+        console.log('tick event', event)
+        logged = true
+      }
+    }
+
+
+    // var a = {}
+    // var b = {}
+
+    // a['click'] = ['a_click_1']
+    // a['down'] = ['a_down_1', 'a_down_2', 'a_down_3']
+
+    // var arr = a['click']
+
+    // console.log(a)
+
+    // delete a['click']
+
+    // console.log(a)
+
+
+
+    // function vv() {
+    //   var v = 10
+
+    //   while (v > 0) {
+    //     if (v > 5) {
+    //       console.log(v)
+    //       return true
+    //     }
+    //     console.log(v)
+    //     v -= 1
+    //   }
+    //   console.log(v)
+    //   return false
+    // }
+
+    // console.log(vv())
+
+
+
+
+
+    /**
+     * 两种方式，耗时差不多是2倍的关系
+     */
+
+    // var count = 1000000
+
+    // var loop = 5
+
+    // var time
+    // var end
+    // var start
+    // var times
+    // var all
+
+
+    // times = []
+    // for (var m = 0; m < loop; m++) {
+    //   start = Date.now()
+    //   for (var i = 0; i < count; i++) {
+    //     time = Date.now()
+    //   }
+    //   end = Date.now()
+    //   console.log('Date.now()', (end - start) / 1000)
+    //   times.push(end - start)
+    // }
+
+    // all = times.reduce(function (prev, current) {
+    //   return prev + current
+    // })
+
+    // console.log('>>>>>> Date.now() average:', all / loop / 1000) // 0.1138s
+
+
+
+    // times = []
+    // for (var m = 0; m < loop; m++) {
+    //   start = new Date().getTime()
+    //   for (var i = 0; i < count; i++) {
+    //     time = new Date().getTime()
+    //   }
+    //   end = new Date().getTime()
+    //   console.log('new Date().getTime()', (end - start) / 1000)
+    //   times.push(end - start)
+    // }
+
+    // all = times.reduce(function (prev, current) {
+    //   return prev + current
+    // })
+
+    // console.log('>>>>>> new Date().getTime() average:', all / loop / 1000) // 0.2112s
+
+
+
+  }
+</script> -->
+
+<!-- <script>
   // function proto() {
 
   // }
@@ -234,6 +236,78 @@
   var a = new pro.constructor('aaaa')
   console.log(a, a instanceof Person, a instanceof Student) // true false
   console.log(a.greet()) // hi, i.m aaaa
+</script> -->
+
+<script>
+var canvas = document.getElementById("testCanvas");
+var stage = new createjs.Stage(canvas)
+
+var bg = new createjs.Shape()
+bg.graphics.beginFill('blue')
+bg.graphics.drawRect(0, 0, canvas.width, canvas.height)
+stage.addChild(bg)
+
+var green = new createjs.Shape()
+green.graphics.beginFill('green')
+green.graphics.drawRect(0, 0, 100, 100)
+green.x = 100
+green.y = 100
+stage.addChild(green)
+
+
+var circle = new createjs.Shape()
+circle.graphics.beginFill('red')
+circle.graphics.drawRect(0, 0, 100, 100)
+circle.rotation = 45
+circle.x = 100
+circle.y = 100
+stage.addChild(circle)
+
+stage.rotation = 30
+
+stage.update()
+
+
+
+var matrix = circle.getMatrix()
+console.log('matrix', matrix)
+
+
+</script>
+
+<script>
+  /**
+   * while从当前开始，一直loop到根，计算显示对象的总的变换矩阵，
+  */
+function Node(value) {
+  this.value = value
+}
+
+Node.prototype.toString = function() {
+  console.log(`node value：${this.value}`)
+}
+
+var nodes = []
+
+for (var i = 0;i<5;i++) {
+  nodes.push(new Node(i))
+}
+
+for(var i=0,len=nodes.length;i<=len-2;i++) {
+  nodes[i].parent = nodes[i+1]
+}
+
+var node = nodes[0]
+var vv = node.value
+while(node.parent) {
+  node = node.parent
+  vv += '  ' + node.value
+}
+
+console.log(nodes)
+console.log(vv)
+
+
 </script>
 
 </html>
