@@ -1,10 +1,30 @@
+！！！
+依然没有解决如何减少绘制次数或者说数量的问题，每次绘制都是按照 display list 从头渲染。
+虽然有bitmapCache，但这个只能对于内部的内容不变的DisplayObject才有效，如果内容一致在变，用了反而不好。而且数量多了也会增加内存消耗，毕竟
+要对每个对象设置一个离屏的canvas。
+
+那这里就这样优化下:指定缓存用的canvas的数量，并且设置画布的大小，比如2000×2000，如果不够了再增加，这样子减少离屏canvas的量，就能减少内存耗用了。
+问题就是要将显示对象合理的装入这个“池子”里，找到合适的画布，并写入。
+
+那这样子，会不会又增加了很多计算量呢？要做比对，从中找出合理的规则。
+
+从根容器开始，也就是 Stage，遍历整个 display list，看哪个需要更新，特定更新此区域？但这样子一帧内循环的是不是又增加很多工作量呢？
+
+可以这样：如果某一级容器发生改变了，那就不要继续比对它的子对象了，就都认定要重新渲染。
+
+
+
+
+
 1.bitmapCache是干嘛的？ 怎么实现的？
 
+    就是个缓存类，通过离屏渲染提高性能，将 DisplayObject的内容写入到离屏的 canvas上，如果传入了指定 canvas，就写到指定的上。如果没有
+    指定就 document.createElement创建一个。
 
 2.displayobject的matrix计算？getConcatenatedMatrix ？
+
 displayobject getMatrix 得到的矩阵是它自己的矩阵，相对于其父容器的变换，
-getConcatenatedMatrix 得到的是其一直到跟容器的矩阵，相对于根容器，也就是 Stage，一般不会给Stage做变换，所以相当于针对canvas显示窗口的变换。
-如果Stage发生变换了，那就不是相对于 canvas显示窗口了。
+getConcatenatedMatrix 得到的是其从根容器到自己累积起来的变换矩阵，也就是相对于当前绘图窗口来说的
 
 
 3.Matrix2d ！！！
