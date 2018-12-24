@@ -17,7 +17,7 @@ b  d  ty
 x' = a * x + c * y + tx
 y' = b * x + d * y + ty
 
-初始化matrix：a = 1 ,c = 0, tx = 0, b = 0, d = 1, ty = 0 就是下面的单位矩阵，采用该矩阵，不会对原来的点[x,y]有任何影响
+初始化 matrix ： a = 1 ,c = 0, tx = 0, b = 0, d = 1, ty = 0 就是下面的单位矩阵，采用该矩阵，不会对原来的点[x,y]有任何影响
 1 0 0
 0 1 0
 0 0 1
@@ -77,6 +77,29 @@ x' = x + c * y + 0
 或者
 y' = b * x + y + 0
 
+左乘的意思是，给一个变换的矩阵，放在左边，然后乘以表示坐标的3×1矩阵，得到最后的坐标的矩阵.
+
+| a c tx |   | x |    | a * x + c * y + tx |
+| b d ty | * | y | => | b * x + d * y + ty |
+| 0 0 1  |   | 1 |    | 1                  |
+
+如果拆分开矩阵，比如，先 translate 再 scale 再 rotate，其实最后也是 transformMatrix * positionMatrix => newPositionMatrix
+
+所以就是把所有的变换最后合成一个矩阵，然后这个最后的矩阵再左乘原来的坐标矩阵得到新的坐标矩阵
+
+而在合成这个最后的矩阵的过程中，矩阵之间是按照顺序右乘的。矩阵之间的顺序搞错，得出的变换可就完全不同了。
+
+translateMatrix * scaleMatrix * rotateMatrix => transformMatrix
+
+而在localToGlobal 和 globalToLocal 计算时，要计算出总的变换矩阵。 这个矩阵是从根容器上一级一级变换过来的，也符合上面的右乘顺序：
+
+根容器Matrix × 次根容器Matrix × 次根容器Matrix × .... × 当前显示对象自身的Matrix。
+
+之所以这个顺序，是因为子对象的最终变换，就是在上一层容器的变换的基础上叠加的，跟先 translate 然后 scale 然后 rotate 一个道理。
+
+DisplayObject.prototype.getConcatenatedMatrix 从当前容器开始，一层层往上去乘，所以都是 prependMatrix ，左乘父容器的矩阵。
+
+这个反向去左乘能成立，是因为矩阵的乘法满足结合律： A * B * C == (A * B) * C == A * (B * C)
 
 
 

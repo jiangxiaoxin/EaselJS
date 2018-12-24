@@ -238,7 +238,7 @@
   console.log(a.greet()) // hi, i.m aaaa
 </script> -->
 
-<script>
+<!-- <script>
 var canvas = document.getElementById("testCanvas");
 var stage = new createjs.Stage(canvas)
 
@@ -273,9 +273,57 @@ var matrix = circle.getMatrix()
 console.log('matrix', matrix)
 
 
+</script> -->
+
+<script type="text/javascript">
+  var canvas = document.getElementById('testCanvas')
+  var stage = new createjs.Stage(canvas)
+
+  var rect = new createjs.Shape()
+  rect.graphics.beginFill('blue')
+  rect.graphics.drawRect(0, 0, 100, 100)
+  stage.addChild(rect)
+
+  var matrix = rect.getMatrix()
+  // console.log('1', matrix)
+  var m1 = matrix.clone()
+  matrix.translate(100, 0)
+  var m2 = matrix.clone()
+  // console.log('2', matrix)
+  matrix.scale(2, 2)
+  var m3 = matrix.clone()
+  // console.log('3', matrix)
+  rect.transformMatrix = matrix
+
+  stage.update()
+
+
+  console.log('m1', m1)
+  console.log('m2',m2)
+  console.log('m3', m3)
+
+  var _translate = new createjs.Matrix2D(1, 0, 0, 1, 100, 0)
+  console.log('_translate', _translate)
+
+
+  var _scale = new createjs.Matrix2D(2, 0, 0, 2, 0, 0)
+
+  var m4 = m2.clone()
+  var m5 = m2.clone()
+
+  m4.prependMatrix(_scale)
+  m5.appendMatrix(_scale)
+
+  console.log('_scale prependMatrix', m4)
+  console.log('_scale appendMatrix', m5)
+
+
+
+
+
 </script>
 
-<script>
+<!-- <script>
   /**
    * while从当前开始，一直loop到根，计算显示对象的总的变换矩阵，
   */
@@ -308,6 +356,6 @@ console.log(nodes)
 console.log(vv)
 
 
-</script>
+</script> -->
 
 </html>

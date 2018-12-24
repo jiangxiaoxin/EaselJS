@@ -179,6 +179,8 @@ this.createjs = this.createjs||{};
 	};
 
 	/**
+	 * 左乘传进来的矩阵
+	 *
 	 * Prepends the specified matrix properties to this matrix.
 	 * This is the equivalent of multiplying `(specified matrix) * (this matrix)`.
 	 * All parameters are required.
@@ -206,6 +208,8 @@ this.createjs = this.createjs||{};
 	};
 
 	/**
+	 * 右乘一个新的矩阵
+	 *
 	 * Appends the specified matrix to this matrix.
 	 * This is the equivalent of multiplying `(this matrix) * (specified matrix)`.
 	 * @method appendMatrix

@@ -1058,6 +1058,7 @@ this.createjs = this.createjs || {};
 	 **/
 
 	 /**
+	 	* 获取显示对象本身的矩阵变换值，相对于其父容器的。
 		* 如果传入一个matrix对象，就将显示对象的matrix属性复制进去，
 		* 如果不传，就新建一个matrix 然后复制一份值，这样子外部用这个matrix去做什么处理，都不会影响显示对象本身的变换逻辑
 	  */
@@ -1069,6 +1070,8 @@ this.createjs = this.createjs || {};
 	};
 
 	/**
+	* 获取显示对象完整的变换矩阵， 从最深的父容器开始
+
 	 * Generates a Matrix2D object representing the combined transform of the display object and all of its
 	 * parent Containers up to the highest level ancestor (usually the {{#crossLink "Stage"}}{{/crossLink}}). This can
 	 * be used to transform positions between coordinate spaces, such as with {{#crossLink "DisplayObject/localToGlobal"}}{{/crossLink}}
