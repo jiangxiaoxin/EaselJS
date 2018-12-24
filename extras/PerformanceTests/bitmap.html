@@ -7,13 +7,13 @@
 <body>
 	<!-- include the performance framework first, so it can initialize and inject its UI -->
 	<script src="perfFramework.js"></script>
-	
+
 	<!-- this test will use PreloadJS to load required assets -->
 	<script src="../FauxCanvas/FauxCanvas.js"></script>
 	<script>
 		var c;
 		var containers=200, bmps=200, w, h, count= 0, offset= 0, g, stage, img;
-	
+
 		// runTest is a special method called by the performance framework
 		// it passes the version array (ex. [0,7,1]) and a hash of all the query string values
 		function runTest(version, qs) {
@@ -27,16 +27,30 @@
 			stage = new c.Stage(canvas);
 			stage.tickOnUpdate = false;
 			stage.enableDOMEvents(false);
-			stage.canvas = new FauxCanvas(true);
+
+			stage.canvas = new FauxCanvas(true);	// 这里根本就不往实际的canvas绘制，这种测试真的有意义吗？
+
+
+            // 15:21:47.222 setup      43.00ms
+            // 15:21:47.247 props_0    4.00ms
+            // 15:21:47.276 render_0   28.00ms
+            // 15:21:47.324 props_4    2.00ms
+            // 15:21:47.337 render_4   12.00ms
+
+            // 15:20:01.458 setup        42.00ms
+            // 15:20:01.463 props_0      2.00ms
+            // 15:20:02.264 render_0     801.00ms
+            // 15:20:04.888 props_4      0.00ms
+            // 15:20:05.683 render_4     796.00ms
 
 			img = new Image();
 			img.onload = handleLoad;
 			img.src = "../../_assets/art/daisy.png";
 		}
-		
+
 		function handleLoad() {
-			
-			
+
+
 			time("setup");
 			for (var i=0; i<containers; i++) {
 				var container = getContainer();
@@ -45,11 +59,11 @@
 				}
 			}
 			endTime("setup");
-			
+
 			c.Ticker.timingMode = c.Ticker.RAF;
 			c.Ticker.addEventListener("tick", handleTick);
 		}
-		
+
 		function handleTick(evt) {
 			var sample = (count%4 == 0) ? "_"+count : 0;
 			if (sample) { time("props"+sample); }
@@ -63,17 +77,17 @@
 				}
 			}
 			if (sample) { endTime("props"+sample); }
-			
+
 			if (sample) { time("render"+sample); }
 			stage.update();
 			if (sample) { endTime("render"+sample);}
-			
+
 			if (count > 4) {
 				c.Ticker.removeEventListener("tick", handleTick);
 				endTest();
 			}
 		}
-		
+
 		function getContainer() {
 			var container = stage.addChild(new c.Container());
 			setProps(container);
@@ -81,13 +95,13 @@
 			container.y = h/2;
 			return container;
 		}
-		
+
 		function getBitmap() {
 			var bmp = new c.Bitmap(img);
 			setProps(bmp);
 			return bmp;
 		}
-		
+
 		function setProps(o) {
 			o.x = (Math.random()-0.5)*w;
 			o.y = (Math.random()-0.5)*h;
@@ -97,7 +111,7 @@
 			if (props&4) { o.skewX = Math.random()*45; }
 			if (props&8) { o.skewY = Math.random()*45; }
 		}
-		
+
 		function updateProps(o, i) {
 			var props = i%32;
 			if (props&1) { o.rotation += offset*3; }
@@ -106,9 +120,9 @@
 			if (props&8) { o.skewY += offset*20; }
 			if (i%2) { o.x += offset*5; }
 		}
-		
+
 	</script>
-	
+
 	<p>Tests performance of setting up, manipulating, and drawing a display list comprised of 200 containers and 40,000 bitmaps.</p>
 	<canvas id="testCanvas" width="900" height="450"></canvas>
 </body>

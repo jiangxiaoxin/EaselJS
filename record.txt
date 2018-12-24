@@ -128,7 +128,7 @@ geom
 
 display
 
-    - Stage
+    - Stage => Container
         场景类，视图的管理和渲染。
 
     - DisplayObject

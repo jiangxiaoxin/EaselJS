@@ -63,8 +63,8 @@ this.createjs = this.createjs||{};
 	 **/
 	function Stage(canvas) {
 		this.Container_constructor();
-	
-	
+
+
 	// public properties:
 		/**
 		 * Indicates whether the stage should automatically clear the canvas before each render. You can set this to <code>false</code>
@@ -81,7 +81,7 @@ this.createjs = this.createjs||{};
 		 * @default true
 		 **/
 		this.autoClear = true;
-	
+
 		/**
 		 * The canvas the stage will render to. Multiple stages can share a single canvas, but you must disable autoClear for all but the
 		 * first stage that will be ticked (or they will clear each other's render).
@@ -97,7 +97,7 @@ this.createjs = this.createjs||{};
 		 * @type HTMLCanvasElement | Object
 		 **/
 		this.canvas = (typeof canvas == "string") ? document.getElementById(canvas) : canvas;
-	
+
 		/**
 		 * The current mouse X position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
 		 * position over the canvas, and mouseInBounds will be set to false.
@@ -106,7 +106,7 @@ this.createjs = this.createjs||{};
 		 * @readonly
 		 **/
 		this.mouseX = 0;
-	
+
 		/**
 		 * The current mouse Y position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
 		 * position over the canvas, and mouseInBounds will be set to false.
@@ -115,15 +115,22 @@ this.createjs = this.createjs||{};
 		 * @readonly
 		 **/
 		this.mouseY = 0;
-	
+
 		/**
+		 *
+		 * 设定舞台的更新绘制区域。不设置，那就是在整个舞台上绘制
+		 *
+		 *
 		 * Specifies the area of the stage to affect when calling update. This can be use to selectively
 		 * re-draw specific regions of the canvas. If null, the whole canvas area is drawn.
+		 *
+		 * 设定舞台的更新绘制区域
+		 *
 		 * @property drawRect
 		 * @type {Rectangle}
 		 */
 		this.drawRect = null;
-	
+
 		/**
 		 * Indicates whether display objects should be rendered on whole pixels. You can set the
 		 * {{#crossLink "DisplayObject/snapToPixel"}}{{/crossLink}} property of
@@ -133,7 +140,7 @@ this.createjs = this.createjs||{};
 		 * @default false
 		 **/
 		this.snapToPixelEnabled = false;
-	
+
 		/**
 		 * Indicates whether the mouse is currently within the bounds of the canvas.
 		 * @property mouseInBounds
@@ -141,7 +148,7 @@ this.createjs = this.createjs||{};
 		 * @default false
 		 **/
 		this.mouseInBounds = false;
-	
+
 		/**
 		 * If true, tick callbacks will be called on all display objects on the stage prior to rendering to the canvas.
 		 * @property tickOnUpdate
@@ -149,7 +156,7 @@ this.createjs = this.createjs||{};
 		 * @default true
 		 **/
 		this.tickOnUpdate = true;
-	
+
 		/**
 		 * If true, mouse move events will continue to be called when the mouse leaves the target canvas. See
 		 * {{#crossLink "Stage/mouseInBounds:property"}}{{/crossLink}}, and {{#crossLink "MouseEvent"}}{{/crossLink}}
@@ -159,8 +166,8 @@ this.createjs = this.createjs||{};
 		 * @default false
 		 **/
 		this.mouseMoveOutside = false;
-		
-		
+
+
 		/**
 		 * Prevents selection of other elements in the html page if the user clicks and drags, or double clicks on the canvas.
 		 * This works by calling `preventDefault()` on any mousedown events (or touch equivalent) originating on the canvas.
@@ -169,15 +176,15 @@ this.createjs = this.createjs||{};
 		 * @default true
 		 **/
 		this.preventSelection = true;
-	
+
 		/**
 		 * The hitArea property is not supported for Stage.
 		 * @property hitArea
 		 * @type {DisplayObject}
 		 * @default null
 		 */
-		 
-		 
+
+
 	// private properties:
 		/**
 		 * Holds objects with data for each active pointer id. Each object has the following properties:
@@ -187,7 +194,7 @@ this.createjs = this.createjs||{};
 		 * @private
 		 */
 		this._pointerData = {};
-	
+
 		/**
 		 * Number of active pointers.
 		 * @property _pointerCount
@@ -195,7 +202,7 @@ this.createjs = this.createjs||{};
 		 * @private
 		 */
 		this._pointerCount = 0;
-	
+
 		/**
 		 * The ID of the primary pointer.
 		 * @property _primaryPointerID
@@ -203,29 +210,29 @@ this.createjs = this.createjs||{};
 		 * @private
 		 */
 		this._primaryPointerID = null;
-	
+
 		/**
 		 * @property _mouseOverIntervalID
 		 * @protected
 		 * @type Number
 		 **/
 		this._mouseOverIntervalID = null;
-		
+
 		/**
 		 * @property _nextStage
 		 * @protected
 		 * @type Stage
 		 **/
 		this._nextStage = null;
-		
+
 		/**
 		 * @property _prevStage
 		 * @protected
 		 * @type Stage
 		 **/
 		this._prevStage = null;
-		
-		
+
+
 	// initialize:
 		this.enableDOMEvents(true);
 	}
@@ -269,35 +276,35 @@ this.createjs = this.createjs||{};
 	 * @event mouseenter
 	 * @since 0.7.0
 	 */
-	 
+
 	/**
 	 * Dispatched each update immediately before the tick event is propagated through the display list.
 	 * You can call preventDefault on the event object to cancel propagating the tick event.
 	 * @event tickstart
 	 * @since 0.7.0
 	 */
-	 
+
 	/**
 	 * Dispatched each update immediately after the tick event is propagated through the display list. Does not fire if
 	 * tickOnUpdate is false. Precedes the "drawstart" event.
 	 * @event tickend
 	 * @since 0.7.0
 	 */
-	 
+
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
 	 * You can call preventDefault on the event object to cancel the draw.
 	 * @event drawstart
 	 * @since 0.7.0
 	 */
-	 
+
 	/**
 	 * Dispatched each update immediately after the display list is drawn to the canvas and the canvas context is restored.
 	 * @event drawend
 	 * @since 0.7.0
 	 */
 
-	 
+
 // getter / setters:
 	/**
 	 * Specifies a target stage that will have mouse / touch interactions relayed to it after this stage handles them.
@@ -307,7 +314,7 @@ this.createjs = this.createjs||{};
 	 *      topStage.nextStage = bottomStage;
 	 *
 	 * To disable relaying, set nextStage to null.
-	 * 
+	 *
 	 * MouseOver, MouseOut, RollOver, and RollOut interactions are also passed through using the mouse over settings
 	 * of the top-most stage, but are only processed if the target stage has mouse over interactions enabled.
 	 * Considerations when using roll over in relay targets:<OL>
@@ -320,12 +327,12 @@ this.createjs = this.createjs||{};
 	 * 	topStage.nextStage = targetStage;
 	 * 	topStage.enableMouseOver(10);
 	 * 	targetStage.enableMouseOver(30);
-	 * 
+	 *
 	 * If the target stage's canvas is completely covered by this stage's canvas, you may also want to disable its
 	 * DOM events using:
-	 * 
+	 *
 	 *	targetStage.enableDOMEvents(false);
-	 * 
+	 *
 	 * @property nextStage
 	 * @type {Stage}
 	 **/
@@ -337,7 +344,7 @@ this.createjs = this.createjs||{};
 		if (value) { value._prevStage = this; }
 		this._nextStage = value;
 	};
-	
+
 	try {
 		Object.defineProperties(p, {
 			nextStage: { get: p._get_nextStage, set: p._set_nextStage }
@@ -362,18 +369,18 @@ this.createjs = this.createjs||{};
 		var r = this.drawRect, ctx = this.canvas.getContext("2d");
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		if (this.autoClear) {
-			if (r) { ctx.clearRect(r.x, r.y, r.width, r.height); }
+			if (r) { ctx.clearRect(r.x, r.y, r.width, r.height); }	// 如果设置了绘制区域，就只清理那一块区域
 			else { ctx.clearRect(0, 0, this.canvas.width+1, this.canvas.height+1); }
 		}
 		ctx.save();
-		if (this.drawRect) {
+		if (this.drawRect) {	// 如果设置了绘制区域，就开启路径，rect指定这个区域，然后clip限定裁剪。之后就在这个区域绘制了。
 			ctx.beginPath();
 			ctx.rect(r.x, r.y, r.width, r.height);
 			ctx.clip();
 		}
-		this.updateContext(ctx);
-		this.draw(ctx, false);
-		ctx.restore();
+		this.updateContext(ctx);	// stage -> container -> displayobject 所以先按照stage自己的属性，设置一次context的属性
+		this.draw(ctx, false);	// 然后调了Stage的draw方法，其实调用了container的方法，container又将自己的子对象添加到context上
+		ctx.restore();	// 从根部完成了一次绘制，然后解锁context
 		this.dispatchEvent("drawend");
 	};
 
@@ -409,18 +416,18 @@ this.createjs = this.createjs||{};
 	 * 	function handleTick(evtObj) {
 	 * 		// clone the event object from Ticker, and add some custom data to it:
 	 * 		var evt = evtObj.clone().set({greeting:"hello", name:"world"});
-	 * 		
+	 *
 	 * 		// pass it to stage.update():
 	 * 		myStage.update(evt); // subsequently calls tick() with the same param
 	 * 	}
-	 * 	
+	 *
 	 * 	// ...
 	 * 	myDisplayObject.on("tick", handleDisplayObjectTick);
 	 * 	function handleDisplayObjectTick(evt) {
 	 * 		console.log(evt.delta); // the delta property from the Ticker tick event object
 	 * 		console.log(evt.greeting, evt.name); // custom data: "hello world"
 	 * 	}
-	 * 
+	 *
 	 * @method tick
 	 * @param {Object} [props] An object with properties that should be copied to the event object. Should usually be a Ticker event object, or similar object with a delta property.
 	 **/
@@ -480,7 +487,7 @@ this.createjs = this.createjs||{};
 			data = ctx.getImageData(0, 0, w, h);
 			var compositeOperation = ctx.globalCompositeOperation;
 			ctx.globalCompositeOperation = "destination-over";
-			
+
 			ctx.fillStyle = backgroundColor;
 			ctx.fillRect(0, 0, w, h);
 		}
@@ -654,11 +661,11 @@ this.createjs = this.createjs||{};
 			if (id === -1 && o.inBounds == !inBounds) {
 				this._dispatchMouseEvent(this, (inBounds ? "mouseleave" : "mouseenter"), false, id, o, e);
 			}
-			
+
 			this._dispatchMouseEvent(this, "stagemousemove", false, id, o, e);
 			this._dispatchMouseEvent(o.target, "pressmove", true, id, o, e);
 		}
-		
+
 		nextStage&&nextStage._handlePointerMove(id, e, pageX, pageY, null);
 	};
 
@@ -719,20 +726,20 @@ this.createjs = this.createjs||{};
 	p._handlePointerUp = function(id, e, clear, owner) {
 		var nextStage = this._nextStage, o = this._getPointerData(id);
 		if (this._prevStage && owner === undefined) { return; } // redundant listener.
-		
+
 		var target=null, oTarget = o.target;
 		if (!owner && (oTarget || nextStage)) { target = this._getObjectsUnderPoint(o.x, o.y, null, true); }
-		
+
 		if (o.down) { this._dispatchMouseEvent(this, "stagemouseup", false, id, o, e, target); o.down = false; }
-		
+
 		if (target == oTarget) { this._dispatchMouseEvent(oTarget, "click", true, id, o, e); }
 		this._dispatchMouseEvent(oTarget, "pressup", true, id, o, e);
-		
+
 		if (clear) {
 			if (id==this._primaryPointerID) { this._primaryPointerID = null; }
 			delete(this._pointerData[id]);
 		} else { o.target = null; }
-		
+
 		nextStage&&nextStage._handlePointerUp(id, e, clear, owner || target && this);
 	};
 
@@ -757,14 +764,14 @@ this.createjs = this.createjs||{};
 	p._handlePointerDown = function(id, e, pageX, pageY, owner) {
 		if (this.preventSelection) { e.preventDefault(); }
 		if (this._primaryPointerID == null || id === -1) { this._primaryPointerID = id; } // mouse always takes over.
-		
+
 		if (pageY != null) { this._updatePointerPosition(id, e, pageX, pageY); }
 		var target = null, nextStage = this._nextStage, o = this._getPointerData(id);
 		if (!owner) { target = o.target = this._getObjectsUnderPoint(o.x, o.y, null, true); }
 
 		if (o.inBounds) { this._dispatchMouseEvent(this, "stagemousedown", false, id, o, e, target); o.down = true; }
 		this._dispatchMouseEvent(target, "mousedown", true, id, o, e);
-		
+
 		nextStage&&nextStage._handlePointerDown(id, e, pageX, pageY, owner || target && this);
 	};
 
@@ -777,7 +784,7 @@ this.createjs = this.createjs||{};
 	 **/
 	p._testMouseOver = function(clear, owner, eventTarget) {
 		if (this._prevStage && owner === undefined) { return; } // redundant listener.
-		
+
 		var nextStage = this._nextStage;
 		if (!this._mouseOverIntervalID) {
 			// not enabled for mouseover, but should still relay the event.
@@ -787,11 +794,11 @@ this.createjs = this.createjs||{};
 		var o = this._getPointerData(-1);
 		// only update if the mouse position has changed. This provides a lot of optimization, but has some trade-offs.
 		if (!o || (!clear && this.mouseX == this._mouseOverX && this.mouseY == this._mouseOverY && this.mouseInBounds)) { return; }
-		
+
 		var e = o.posEvtObj;
 		var isEventTarget = eventTarget || e&&(e.target == this.canvas);
 		var target=null, common = -1, cursor="", t, i, l;
-		
+
 		if (!owner && (clear || this.mouseInBounds && isEventTarget)) {
 			target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, true);
 			this._mouseOverX = this.mouseX;
@@ -833,7 +840,7 @@ this.createjs = this.createjs||{};
 		if (oldTarget != target) {
 			this._dispatchMouseEvent(target, "mouseover", true, -1, o, e, oldTarget);
 		}
-		
+
 		nextStage&&nextStage._testMouseOver(clear, owner || target && this, eventTarget || isEventTarget && this);
 	};
 

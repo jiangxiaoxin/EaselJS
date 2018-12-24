@@ -7,28 +7,34 @@
 <body>
 	<!-- include the performance framework first, so it can initialize and inject its UI -->
 	<script src="perfFramework.js"></script>
-	
+
 	<!-- this test will use PreloadJS to load required assets -->
 	<script src="../../_assets/libs/preloadjs-NEXT.min.js"></script>
 	<script>
 		// runTest is a special method called by the performance framework
 		// it passes the version array (ex. [0,7,1]) and a hash of all the query string values
 		function runTest(version, qs) {
+		    console.log('runTest')
+
+
 			var queue = new createjs.LoadQueue();
 			queue.on("complete", assetsLoaded);
 			queue.loadManifest([
 				{id:"bmpfont", src:"spritesheet_font.png"}
 			], true, "../../_assets/art/");
 		}
-		
+
 		function assetsLoaded(evt) {
+
+		    console.log('assetsLoaded')
+
 			// the performance framework defines a function called checkVersion
 			// it returns true if the loaded version of EaselJS is equal or greater than the version string passed in.
 			// for example, in version 0.5.0 all classes were moved to the createjs namespace from the global (window) namespace.
 			var ns = checkVersion("0.5") ? createjs : window;
 			// similarly, in version 0.7.0, BitmapAnimation was renamed to Sprite.
 			var SpriteClass = checkVersion("0.7") ? ns.Sprite : ns.BitmapAnimation;
-			
+
 			// some spritesheet data we're going to use in the test:
 			var spritesheet = new ns.SpriteSheet({
 				"images":[evt.target.getResult("bmpfont").src],
@@ -65,14 +71,16 @@
 					[966, 2, 9, 10, 0, -17, -31]
 				]
 			});
-			
+
 			// grab the canvas, and create a stage, using the appropriate namespace:
 			var canvas = document.getElementById("testCanvas");
 			var w=canvas.width, h=canvas.height;
 			var stage = new ns.Stage("testCanvas");
 			// we're not interested in the performance of the tick event here, so we'll disable it:
+
+
 			stage.tickOnUpdate = false;
-			
+
 			// performanceFramework adds time and timeEnd functions, which start and end a named timer
 			// in this case, our test will measure three values: time to instantiate, render, and total
 			time("total");
@@ -86,19 +94,19 @@
 			}
 			// setting the second param of endTime to false prevents it from being logged in automated tests
 			endTime("instantiate", true);
-			
+
 			time("render");
 			stage.update();
 			endTime("render", true);
 			endTime("total", true);
-			
+
 			// when the test has completely finished, you need to call endTest()
 			// this outputs the results, or continues the automated test
 			// note that tests can be asynchronous, or even require user interaction
 			endTest();
 		}
 	</script>
-	
+
 	<p>Tests performance of instantiating and rendering 50k Sprite instances on stage.</p>
 	<canvas id="testCanvas" width="900" height="450"></canvas>
 </body>

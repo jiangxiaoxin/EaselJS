@@ -3,7 +3,7 @@
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
 * Copyright (c) 2010 gskinner.com, inc.
-* 
+*
 * Permission is hereby granted, free of charge, to any person
 * obtaining a copy of this software and associated documentation
 * files (the "Software"), to deal in the Software without
@@ -12,10 +12,10 @@
 * copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following
 * conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be
 * included in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -31,7 +31,7 @@ this.createjs = this.createjs||{};
 
 (function() {
 	"use strict";
-	
+
 
 // constructor:
 /**
@@ -56,7 +56,7 @@ this.createjs = this.createjs||{};
  **/
 	function Container() {
 		this.DisplayObject_constructor();
-		
+
 	// public properties:
 		/**
 		 * The array of children in the display list. You should usually use the child management methods such as
@@ -68,7 +68,7 @@ this.createjs = this.createjs||{};
 		 * @default null
 		 **/
 		this.children = [];
-		
+
 		/**
 		 * Indicates whether the children of this container are independently enabled for mouse/pointer interaction.
 		 * If false, the children will be aggregated under the container - for example, a click on a child shape would
@@ -78,7 +78,7 @@ this.createjs = this.createjs||{};
 		 * @default true
 		 **/
 		this.mouseChildren = true;
-		
+
 		/**
 		 * If false, the tick will not be propagated to children of this Container. This can provide some performance benefits.
 		 * In addition to preventing the "tick" event from being dispatched, it will also prevent tick related updates
@@ -90,8 +90,8 @@ this.createjs = this.createjs||{};
 		this.tickChildren = true;
 	}
 	var p = createjs.extend(Container, createjs.DisplayObject);
-	
-	
+
+
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "Container/numChildren:property"}}{{/crossLink}} property instead.
@@ -122,7 +122,7 @@ this.createjs = this.createjs||{};
 			numChildren: { get: p._getNumChildren }
 		});
 	} catch (e) {}
-	
+
 
 // public methods:
 	/**
@@ -132,7 +132,7 @@ this.createjs = this.createjs||{};
 	 * @deprecated in favour of `createjs.promote()`
 	 **/
 	p.initialize = Container; // TODO: deprecated.
-	
+
 	/**
 	 * Returns true or false indicating whether the display object would be visible if drawn to a canvas.
 	 * This does not account for whether it would be visible within the boundaries of the stage.
@@ -158,23 +158,26 @@ this.createjs = this.createjs||{};
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
+
+        // 从cache里画显示对象，这个cache是这个容器整的一个缓存，所以如果采用了之后就直接返回
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
-		
+
+		// 如果不是用缓存，或者缓存没有呢？那就按照“层级”，把子对象一个个重新绘制一遍
 		// this ensures we don't have issues with display list changes that occur during a draw:
 		var list = this.children.slice();
-		for (var i=0,l=list.length; i<l; i++) {
+		for (var i=0,l=list.length; i<l; i++) {	// 遍历子对象列表
 			var child = list[i];
-			if (!child.isVisible()) { continue; }
-			
+			if (!child.isVisible()) { continue; }	// 如果不可见就直接跳过，没必要渲染
+
 			// draw the child:
-			ctx.save();
-			child.updateContext(ctx);
-			child.draw(ctx);
-			ctx.restore();
+			ctx.save();	// 开启一个子对象的绘制
+			child.updateContext(ctx);	// 按照子对象的属性更新context属性
+			child.draw(ctx);	// child根类是 DisplayObject，所以都会先用下根类的draw，就是判断是否可以用cache来画。如果不可以，就用自己特定子类的方法来绘制
+			ctx.restore();	// 绘制完一个子对象，重新打开context
 		}
 		return true;
 	};
-	
+
 	/**
 	 * Adds a child to the top of the display list.
 	 *
@@ -330,7 +333,7 @@ this.createjs = this.createjs||{};
 	p.getChildAt = function(index) {
 		return this.children[index];
 	};
-	
+
 	/**
 	 * Returns the child with the specified name.
 	 * @method getChildByName
@@ -349,7 +352,7 @@ this.createjs = this.createjs||{};
 	 * Performs an array sort operation on the child list.
 	 *
 	 * <h4>Example: Display children with a higher y in front.</h4>
-	 * 
+	 *
 	 *      var sortFunction = function(obj1, obj2, options) {
 	 *          if (obj1.y > obj2.y) { return 1; }
 	 *          if (obj1.y < obj2.y) { return -1; }
@@ -379,7 +382,7 @@ this.createjs = this.createjs||{};
 	p.getChildIndex = function(child) {
 		return createjs.indexOf(this.children, child);
 	};
-	
+
 	/**
 	 * Swaps the children at the specified indexes. Fails silently if either index is out of range.
 	 * @method swapChildrenAt
@@ -394,7 +397,7 @@ this.createjs = this.createjs||{};
 		kids[index1] = o2;
 		kids[index2] = o1;
 	};
-	
+
 	/**
 	 * Swaps the specified children's depth in the display list. Fails silently if either child is not a child of this
 	 * Container.
@@ -414,11 +417,11 @@ this.createjs = this.createjs||{};
 		kids[index1] = child2;
 		kids[index2] = child1;
 	};
-	
+
 	/**
 	 * Changes the depth of the specified child. Fails silently if the child is not a child of this container, or the index is out of range.
 	 * @param {DisplayObject} child
-	 * @param {Number} index  
+	 * @param {Number} index
 	 * @method setChildIndex
 	 **/
 	p.setChildIndex = function(child, index) {
@@ -469,7 +472,7 @@ this.createjs = this.createjs||{};
 	 * This uses shape based hit detection, and can be an expensive operation to run, so it is best to use it carefully.
 	 * For example, if testing for objects under the mouse, test on tick (instead of on {{#crossLink "Stage/stagemousemove:event"}}{{/crossLink}}),
 	 * and only if the mouse's position has changed.
-	 * 
+	 *
 	 * <ul>
 	 *     <li>By default (mode=0) this method evaluates all display objects.</li>
 	 *     <li>By setting the `mode` parameter to `1`, the {{#crossLink "DisplayObject/mouseEnabled:property"}}{{/crossLink}}
@@ -479,7 +482,7 @@ this.createjs = this.createjs||{};
 	 * 	   	that would normally intercept mouse interaction will be included. This can significantly improve performance
 	 * 	   	in some cases by reducing the number of display objects that need to be tested.</li>
 	 * </ul>
-	 * 
+	 *
 	 * This method accounts for both {{#crossLink "DisplayObject/hitArea:property"}}{{/crossLink}} and {{#crossLink "DisplayObject/mask:property"}}{{/crossLink}}.
 	 * @method getObjectsUnderPoint
 	 * @param {Number} x The x position in the container to test.
@@ -508,13 +511,13 @@ this.createjs = this.createjs||{};
 		var pt = this.localToGlobal(x, y);
 		return this._getObjectsUnderPoint(pt.x, pt.y, null, mode>0, mode==1);
 	};
-	
+
 	// Docced in superclass
 	p.getBounds = function() {
 		return this._getBounds(null, true);
 	};
-	
-	
+
+
 	// Docced in superclass
 	p.getTransformedBounds = function() {
 		return this._getBounds();
@@ -559,7 +562,7 @@ this.createjs = this.createjs||{};
 		}
 		this.DisplayObject__tick(evtObj);
 	};
-	
+
 	/**
 	 * Recursively clones all children of this container, and adds them to the target container.
 	 * @method cloneChildren
@@ -575,14 +578,14 @@ this.createjs = this.createjs||{};
 			arr.push(clone);
 		}
 	};
-	
+
 	/**
 	 * Removes the child at the specified index from the display list, and sets its parent to null.
 	 * Used by `removeChildAt`, `addChild`, and `addChildAt`.
 	 * @method removeChildAt
 	 * @protected
 	 * @param {Number} index The index of the child to remove.
-	 * @param {Boolean} [silent] Prevents dispatch of `removed` event if true.
+	 * @param {Boolean} [silent] Prevents dispatch of `removed` event if true. 静默，删除的时候别吱声
 	 * @return {Boolean} true if the child (or children) was removed, or false if any index was out of range.
 	 **/
 	p._removeChildAt = function(index, silent) {
@@ -618,23 +621,23 @@ this.createjs = this.createjs||{};
 			var hitArea = child.hitArea;
 			if (!child.visible || (!hitArea && !child.isVisible()) || (mouse && !child.mouseEnabled)) { continue; }
 			if (!hitArea && !this._testMask(child, x, y)) { continue; }
-			
+
 			// if a child container has a hitArea then we only need to check its hitAre2a, so we can treat it as a normal DO:
 			if (!hitArea && child instanceof Container) {
 				var result = child._getObjectsUnderPoint(x, y, arr, mouse, activeListener, currentDepth+1);
 				if (!arr && result) { return (mouse && !this.mouseChildren) ? this : result; }
 			} else {
 				if (mouse && !activeListener && !child._hasMouseEventListener()) { continue; }
-				
+
 				// TODO: can we pass displayProps forward, to avoid having to calculate this backwards every time? It's kind of a mixed bag. When we're only hunting for DOs with event listeners, it may not make sense.
 				var props = child.getConcatenatedDisplayProps(child._props);
 				mtx = props.matrix;
-				
+
 				if (hitArea) {
 					mtx.appendMatrix(hitArea.getMatrix(hitArea._props.matrix));
 					props.alpha = hitArea.alpha;
 				}
-				
+
 				ctx.globalAlpha = props.alpha;
 				ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
 				(hitArea||child).draw(ctx);
@@ -647,7 +650,7 @@ this.createjs = this.createjs||{};
 		}
 		return null;
 	};
-	
+
 	/**
 	 * @method _testMask
 	 * @param {DisplayObject} target
@@ -659,26 +662,26 @@ this.createjs = this.createjs||{};
 	p._testMask = function(target, x, y) {
 		var mask = target.mask;
 		if (!mask || !mask.graphics || mask.graphics.isEmpty()) { return true; }
-		
+
 		var mtx = this._props.matrix, parent = target.parent;
 		mtx = parent ? parent.getConcatenatedMatrix(mtx) : mtx.identity();
 		mtx = mask.getMatrix(mask._props.matrix).prependMatrix(mtx);
-		
+
 		var ctx = createjs.DisplayObject._hitTestContext;
 		ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
-		
+
 		// draw the mask as a solid fill:
 		mask.graphics.drawAsPath(ctx);
 		ctx.fillStyle = "#000";
 		ctx.fill();
-		
+
 		if (!this._testHit(ctx)) { return false; }
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.clearRect(0, 0, 2, 2);
-		
+
 		return true;
 	};
-	
+
 	/**
 	 * @method _getBounds
 	 * @param {Matrix2D} matrix
@@ -689,11 +692,11 @@ this.createjs = this.createjs||{};
 	p._getBounds = function(matrix, ignoreTransform) {
 		var bounds = this.DisplayObject_getBounds();
 		if (bounds) { return this._transformBounds(bounds, matrix, ignoreTransform); }
-		
+
 		var mtx = this._props.matrix;
 		mtx = ignoreTransform ? mtx.identity() : this.getMatrix(mtx);
 		if (matrix) { mtx.prependMatrix(matrix); }
-		
+
 		var l = this.children.length, rect=null;
 		for (var i=0; i<l; i++) {
 			var child = this.children[i];

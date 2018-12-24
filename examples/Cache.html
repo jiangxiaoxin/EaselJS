@@ -28,9 +28,9 @@
 
 		var colors = ["#828b20", "#b0ac31", "#cbc53d", "#fad779", "#f9e4ad", "#faf2db", "#563512", "#9b4a0b", "#d36600", "#fe8a00", "#f9a71f"];
 
-		for (var i = 0; i < 200; i++) {
-			shape = new createjs.Shape();	// 从外面开始往里一层一层画圈
-			for (var j = rings; j > 0; j--) {
+		for (var i = 0; i < 200; i++) {	// 画200个圆
+			shape = new createjs.Shape();
+			for (var j = rings; j > 0; j--) {	// 从外面开始往里一层一层画圈，画40层
 				shape.graphics.beginFill(colors[Math.random() * colors.length | 0]).drawCircle(0, 0, radius * j / rings);
 			}
 			shape.x = Math.random() * canvas.width;
