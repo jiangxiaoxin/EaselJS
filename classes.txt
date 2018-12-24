@@ -1,0 +1,35 @@
+1. createjs
+
+events
+    - Event
+        定义个事件类
+    - EventDispatcher
+        事件调度器类，发出事件，监听事件。
+        静态类方法 initialize 可以扩展一个对象，让它可以监听事件，发出事件
+
+
+2. easeljs
+
+geom
+    - DisplayProps
+        一个数据类，显示对象的 visible alpha 等属性的集合。
+    - Matrix2D
+        数学计算类，2维的矩阵计算，用于显示对象的变换。
+    - Point
+        二维点的定义
+    - Rectangle
+        矩形的数学类，定义个矩形，判断矩形是否相交，是否包含，包含的最小矩形等方法。
+
+
+display
+
+    - Stage
+        场景类，视图的管理和渲染。
+
+    - DisplayObject
+
+    - Container => DisplayObject
+
+    - Bitmap
+
+    - Graphics
